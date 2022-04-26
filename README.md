@@ -22,6 +22,19 @@ As far as I understand, the M6000 mainboard is based on:
 The H8 is in charge of the boot process and control over the main bus used to communicate with the FPGA, the DSPs (over the bus connector) and the floppy disk drive controler.
 This repository is about the firmware reverse only, details on the electronics part can be found here: https://radix-studio.fr/blog/2022/03/10/going-deeper-on-the-m6000/
 
+## Flash Memory
+
+H8 boots on a E28F800 B5B70 memory chip.
+Since we're on x16 Mode bottom boot, memory map is:
+
+![H8 Memory Map](MemoryMap.png)
+
+Since our firmware is 196608 bytes, in 16bits adressing mode we go up to 0x2FFFF. Our firmware seems to be flashed "as-it" and fills:
+
+  - The  16KB boot block (from 0x0000 to 0x1FFF)
+  - The first 8KB parameters block (from 0x2000 to 0x2FFF)
+  - The second 8KBboot block (from 0x3000 to 0x3FFF)
+  - The 96KB main block (from 0x4000 to 0xFFFF) 
 
 ## BUS
 
