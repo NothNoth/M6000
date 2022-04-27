@@ -25,19 +25,22 @@ This repository is about the firmware reverse only, details on the electronics p
 ## Flash Memory
 
 H8 boots on a E28F800 B5B70 memory chip.
-Since we're on x16 Mode bottom boot, memory map is:
+Since we're on x16 Mode / bottom boot, memory map is:
 
 ![H8 Memory Map](MemoryMap.png)
 
-Since our firmware is 196608 bytes, in 16bits adressing mode we go up to 0x2FFFF. Our firmware seems to be flashed "as-it" and fills:
+Since our firmware is 196608 bytes, thus 192KB (192*1024).
+This doesn't oubviously map to the memory map.
 
-  - The  16KB boot block (from 0x0000 to 0x1FFF)
-  - The first 8KB parameters block (from 0x2000 to 0x2FFF)
-  - The second 8KBboot block (from 0x3000 to 0x3FFF)
-  - The 96KB main block (from 0x4000 to 0xFFFF) 
+Another interesting point: the disassembly code starting from 0x00001C to 0xA617 is (almost) duplicated on 0x1001C to 0x1DDE7.
+
+So our first main program ends near 0x10000 address (in 16bits mode) which is a 128KB memory zone (0x10000 * 2) (including around 44KB of padding).
+Our second main program also fits into a 128KB memory zone (0x10000 to 0x20000) .
+Starting from 0x20000 to the end at 0x2FFFF we have another 128KB memory zone, this time empty.
+
+Our flash memory chip select is connected to CS0 on the H8 CPU.
 
 ## BUS
-
 
 When accessing the __Flash chip__ (28F800):
 
